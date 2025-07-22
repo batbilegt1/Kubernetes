@@ -5,7 +5,7 @@ set -euo pipefail
 ISO_NAME="ubuntu-22.04.5-live-server-amd64.iso"
 ISO_PATH="/var/lib/libvirt/images/$ISO_NAME"
 BASE_DISK="/var/lib/libvirt/images/ubuntu-vm-base.qcow2"
-VM_PREFIX="vm-0"
+VM_PREFIX="vm"
 VM_COUNT=9
 IMAGE_DIR="/var/lib/libvirt/images"
 
