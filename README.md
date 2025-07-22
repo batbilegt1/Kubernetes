@@ -1,8 +1,10 @@
 # Kubernetes
 
 ```
-chmod +x create-master.sh join-worker.sh create-vms.sh
+chmod +x k8s-master-node.sh k8s-worker-node.sh vm-create.sh vm-clean.sh
 
-./create-master.sh
-./join-worker.sh
-./create-vms.sh
+./k8s-master-node.sh.sh
+./k8s-worker-node.sh.sh
+
+./vm-create.sh
+./vm-clean.sh
