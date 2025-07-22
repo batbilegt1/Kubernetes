@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-VM_PREFIX="bmh-vm-0"
+VM_PREFIX="vm"
 VM_COUNT=9
 IMAGE_DIR="/var/lib/libvirt/images"
 SEED_IMG="${IMAGE_DIR}/seed.img"
