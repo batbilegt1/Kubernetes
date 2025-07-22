@@ -1,8 +1,8 @@
 # Kubernetes
 
 ```
-chmod +x create-master.sh
-./create-master.sh
+chmod +x create-master.sh join-worker.sh create-vms.sh
 
-chmod +x join-worker.sh
+./create-master.sh
 ./join-worker.sh
+./create-vms.sh
