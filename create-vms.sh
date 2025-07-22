@@ -5,7 +5,7 @@ set -euo pipefail
 ISO_NAME="ubuntu-22.04.5-live-server-amd64.iso"
 ISO_PATH="/var/lib/libvirt/images/$ISO_NAME"
 BASE_DISK="/var/lib/libvirt/images/ubuntu-vm-base.qcow2"
-VM_PREFIX="bmh-vm-0"
+VM_PREFIX="vm-0"
 VM_COUNT=9
 IMAGE_DIR="/var/lib/libvirt/images"
 
@@ -46,6 +46,8 @@ for i in $(seq 1 $VM_COUNT); do
 
   cat > "$CLOUD_INIT_DIR/user-data" <<EOF
 #cloud-config
+hostname: $VM_NAME
+fqdn: $VM_NAME.local
 users:
   - name: ubuntu
     ssh-authorized-keys:
