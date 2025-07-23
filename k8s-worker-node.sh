@@ -12,8 +12,6 @@ export CA_CERT_HASH=sha256:0bc28b10111356a6364a031f09fb7971caacff12883078e065812
 # === Internal ===
 export JOIN_COMMAND="kubeadm join ${MASTER_IP}:6443 --token ${JOIN_TOKEN} --discovery-token-ca-cert-hash ${CA_CERT_HASH} --cri-socket unix:///var/run/cri-dockerd.sock"
 
-echo "192.168.122.251 vm1" | sudo tee -a /etc/hosts
-
 # === Validation ===
 if [[ $MASTER_IP == *"<"* || $JOIN_TOKEN == *"<"* || $CA_CERT_HASH == *"<"* ]]; then
   echo "[ERROR] Please replace MASTER_IP, JOIN_TOKEN, and CA_CERT_HASH with actual values."
