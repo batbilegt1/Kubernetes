@@ -2,35 +2,31 @@
 
 set -euo pipefail
 
-ISO_NAME="ubuntu-22.04.5-live-server-amd64.iso"
-ISO_PATH="/var/lib/libvirt/images/$ISO_NAME"
-BASE_DISK="/var/lib/libvirt/images/ubuntu-vm-base.qcow2"
+CLOUD_IMG_NAME="ubuntu-22.04-server-cloudimg-amd64.img"
+CLOUD_IMG_URL="https://cloud-images.ubuntu.com/releases/22.04/release/$CLOUD_IMG_NAME"
+IMAGE_DIR="/var/lib/libvirt/images"
+BASE_IMG="$IMAGE_DIR/$CLOUD_IMG_NAME"
 VM_PREFIX="vm"
 VM_COUNT=9
-IMAGE_DIR="/var/lib/libvirt/images"
+DISK_SIZE="100G"
 
 # 1. Install required packages
 sudo apt update
 sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager cloud-image-utils genisoimage
 
-# 2. Download Ubuntu ISO if missing
-if [ ! -f "$ISO_PATH" ]; then
-  wget https://releases.ubuntu.com/jammy/$ISO_NAME -O "$ISO_NAME"
-  sudo mv "$ISO_NAME" "$ISO_PATH"
+# 2. Download cloud image if missing
+if [ ! -f "$BASE_IMG" ]; then
+  wget "$CLOUD_IMG_URL" -O "$CLOUD_IMG_NAME"
+  sudo mv "$CLOUD_IMG_NAME" "$BASE_IMG"
 fi
 
-# 3. Create base disk if missing
-if [ ! -f "$BASE_DISK" ]; then
-  sudo qemu-img create -f qcow2 "$BASE_DISK" 100G
-fi
-
-# 4. Ensure SSH key exists
+# 3. Ensure SSH key exists
 if [ ! -f ~/.ssh/id_ed25519.pub ]; then
   ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
 fi
 PUB_KEY=$(cat ~/.ssh/id_ed25519.pub)
 
-# 5. Loop to create VMs
+# 4. Loop to create VMs
 for i in $(seq 1 $VM_COUNT); do
   VM_NAME="${VM_PREFIX}${i}"
   VM_DISK="${IMAGE_DIR}/${VM_NAME}.qcow2"
@@ -38,24 +34,23 @@ for i in $(seq 1 $VM_COUNT); do
   CLOUD_INIT_ISO_TMP="/tmp/${VM_NAME}-seed.iso"
   CLOUD_INIT_ISO="${IMAGE_DIR}/${VM_NAME}-seed.iso"
 
-  # Create VM disk by copying base
-  sudo cp "$BASE_DISK" "$VM_DISK"
+  # Create VM disk with larger size
+  sudo qemu-img create -f qcow2 -b "$BASE_IMG" -F qcow2 "$VM_DISK" "$DISK_SIZE"
 
-  # Create cloud-init user-data and meta-data
+  # Create cloud-init config
   mkdir -p "$CLOUD_INIT_DIR"
 
   cat > "$CLOUD_INIT_DIR/user-data" <<EOF
 #cloud-config
 hostname: $VM_NAME
-fqdn: $VM_NAME.local
 users:
   - name: ubuntu
     ssh-authorized-keys:
       - $PUB_KEY
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     shell: /bin/bash
-ssh_pwauth: false
 disable_root: false
+ssh_pwauth: false
 EOF
 
   cat > "$CLOUD_INIT_DIR/meta-data" <<EOF
@@ -63,16 +58,12 @@ instance-id: $VM_NAME
 local-hostname: $VM_NAME
 EOF
 
-  # Create cloud-init ISO in /tmp
+  # Create ISO
   genisoimage -output "$CLOUD_INIT_ISO_TMP" -volid cidata -joliet -rock "$CLOUD_INIT_DIR/user-data" "$CLOUD_INIT_DIR/meta-data"
-
-  # Move ISO to /var/lib/libvirt/images with sudo
   sudo mv "$CLOUD_INIT_ISO_TMP" "$CLOUD_INIT_ISO"
-
-  # Clean up temp files
   rm -rf "$CLOUD_INIT_DIR"
 
-  # Create VM with cloud-init ISO attached
+  # Launch VM
   sudo virt-install \
     --name "$VM_NAME" \
     --ram 4096 \
@@ -82,9 +73,9 @@ EOF
     --os-type linux \
     --os-variant ubuntu22.04 \
     --graphics none \
-    --cdrom "$ISO_PATH" \
+    --import \
     --network network=default \
     --noautoconsole
 done
 
-echo "✅ All VMs created with passwordless SSH using your SSH key."
+echo "✅ All $VM_COUNT VMs created with cloud-init and $DISK_SIZE disk size."
