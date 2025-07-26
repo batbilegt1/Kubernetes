@@ -6,7 +6,7 @@ set -e
 # You MUST set these values before running
 export K8S_VERSION=v1.29.12         # Must match control plane version
 export MASTER_IP=192.168.122.251         # Replace with your master IP or DNS name
-export JOIN_TOKEN=69o31u.tw63vv11gowr38f8  # Replace with actual join token
+export JOIN_TOKEN=jsbubi.jtf3b9g822qr0osm  # Replace with actual join token
 export CA_CERT_HASH=sha256:4c0de2ed5fc525c418e3cd17b943f33fcda3e3ae8fe0585e4494b89f9587c92f # Replace with real hash
 
 # === Internal ===
