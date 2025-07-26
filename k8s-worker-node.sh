@@ -6,8 +6,8 @@ set -e
 # You MUST set these values before running
 export K8S_VERSION=v1.29.12         # Must match control plane version
 export MASTER_IP=192.168.122.251         # Replace with your master IP or DNS name
-export JOIN_TOKEN=786opi.cyrkooz5oq2wzba7  # Replace with actual join token
-export CA_CERT_HASH=sha256:0bc28b10111356a6364a031f09fb7971caacff12883078e065812f3b47063ef8 # Replace with real hash
+export JOIN_TOKEN=69o31u.tw63vv11gowr38f8  # Replace with actual join token
+export CA_CERT_HASH=sha256:4c0de2ed5fc525c418e3cd17b943f33fcda3e3ae8fe0585e4494b89f9587c92f # Replace with real hash
 
 # === Internal ===
 export JOIN_COMMAND="kubeadm join ${MASTER_IP}:6443 --token ${JOIN_TOKEN} --discovery-token-ca-cert-hash ${CA_CERT_HASH} --cri-socket unix:///var/run/cri-dockerd.sock"
