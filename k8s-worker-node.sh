@@ -69,7 +69,7 @@ echo "[INFO] Pulling Kubernetes images..."
 sudo kubeadm config images pull --cri-socket unix:///var/run/cri-dockerd.sock --kubernetes-version $K8S_VERSION
 
 echo "[INFO] Adding master node entry to /etc/hosts..."
-echo "${MASTER_IP} vm1" | sudo tee -a /etc/hosts
+echo "${MASTER_IP} vm5" | sudo tee -a /etc/hosts
 
 ### Join the cluster
 echo "[INFO] Running join command..."
