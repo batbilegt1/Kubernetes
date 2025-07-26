@@ -6,6 +6,7 @@ set -e
 # You MUST set these values before running
 export K8S_VERSION=v1.29.12         # Must match control plane version
 export MASTER_IP=192.168.122.61         # Replace with your master IP or DNS name
+export MASTER_NODE_NAME=vm5         # Replace with your master node name
 export JOIN_TOKEN=jsbubi.jtf3b9g822qr0osm  # Replace with actual join token
 export CA_CERT_HASH=sha256:4c0de2ed5fc525c418e3cd17b943f33fcda3e3ae8fe0585e4494b89f9587c92f # Replace with real hash
 
@@ -69,7 +70,7 @@ echo "[INFO] Pulling Kubernetes images..."
 sudo kubeadm config images pull --cri-socket unix:///var/run/cri-dockerd.sock --kubernetes-version $K8S_VERSION
 
 echo "[INFO] Adding master node entry to /etc/hosts..."
-echo "${MASTER_IP} vm5" | sudo tee -a /etc/hosts
+echo "${MASTER_IP} ${MASTER_NODE_NAME}" | sudo tee -a /etc/hosts
 
 ### Join the cluster
 echo "[INFO] Running join command..."
