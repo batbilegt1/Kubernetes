@@ -9,7 +9,7 @@ NODES=(
 )
 CONTROL_PLANE_HOSTNAME="vm1"
 USER="ubuntu"
-SSH_KEY="$HOME/.ssh/id_ed25519"
+SSH_KEY="$HOME/.ssh/id_rsa"
 PUB_KEY="${SSH_KEY}.pub"
 
 # === Install Helm ===
