@@ -31,7 +31,6 @@ export ANSIBLE_ROLES_PATH=~/osh/openstack-helm/roles:~/osh/zuul-jobs/roles
 
 # === Generate Dynamic Inventory ===
 cat > ~/osh/inventory.yaml <<EOF
----
 all:
   vars:
     ansible_user: $USER
