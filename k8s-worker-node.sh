@@ -43,6 +43,8 @@ echo "[INFO] Installing dependencies..."
 sudo apt update
 sudo apt install -y curl wget apt-transport-https ca-certificates gnupg lsb-release software-properties-common
 
+sudo apt install unbound
+
 ### Install Docker
 echo "[INFO] Installing Docker..."
 sudo apt install -y docker.io
