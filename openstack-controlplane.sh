@@ -29,23 +29,6 @@ pip install --user ansible
 
 export ANSIBLE_ROLES_PATH=~/osh/openstack-helm/roles:~/osh/zuul-jobs/roles
 
-# === Generate SSH Key if Not Exists ===
-if [ ! -f "$SSH_KEY" ]; then
-    ssh-keygen -t rsa -b 4096 -C "$USER@host" -f "$SSH_KEY" -N ""
-    chmod 600 "$SSH_KEY"
-fi
-
-# === SSH Key Distribution ===
-echo "🚀 Distributing SSH public key to all nodes..."
-for node in "${NODES[@]}"; do
-    HOSTNAME=$(echo "$node" | awk '{print $1}')
-    IP=$(echo "$node" | awk '{print $2}')
-    echo "➡️  $HOSTNAME ($IP)"
-    ssh "$USER@$IP" "mkdir -p ~/.ssh && chmod 700 ~/.ssh"
-    cat "$PUB_KEY" | ssh "$USER@$IP" "tee -a ~/.ssh/authorized_keys > /dev/null"
-    ssh "$USER@$IP" "chmod 600 ~/.ssh/authorized_keys"
-done
-
 # === Generate Dynamic Inventory ===
 cat > ~/osh/inventory.yaml <<EOF
 ---
