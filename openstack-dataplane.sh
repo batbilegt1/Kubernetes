@@ -27,6 +27,7 @@ git clone https://opendev.org/zuul/zuul-jobs.git
 sudo apt update
 sudo apt install -y python3-pip
 pip install --user ansible
+sudo apt install ansible
 
 export ANSIBLE_ROLES_PATH=~/osh/openstack-helm/roles:~/osh/zuul-jobs/roles
 
