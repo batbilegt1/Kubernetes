@@ -42,6 +42,7 @@ sudo apt update
 sudo apt install -y curl wget apt-transport-https ca-certificates gnupg lsb-release software-properties-common
 
 sudo apt install unbound
+sudo apt install python3-netaddr -y
 
 ### Install Docker
 echo "[INFO] Installing Docker..."
