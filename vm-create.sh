@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-CLOUD_IMG_NAME="ubuntu-22.04-server-cloudimg-amd64.img"
-CLOUD_IMG_URL="https://cloud-images.ubuntu.com/releases/22.04/release/$CLOUD_IMG_NAME"
+CLOUD_IMG_NAME="ubuntu-24.04-server-cloudimg-amd64.img"
+CLOUD_IMG_URL="https://cloud-images.ubuntu.com/releases/24.04/release/$CLOUD_IMG_NAME"
 IMAGE_DIR="/var/lib/libvirt/images"
 BASE_IMG="$IMAGE_DIR/$CLOUD_IMG_NAME"
 VM_PREFIX="vm"
@@ -71,7 +71,7 @@ EOF
     --disk path="$VM_DISK",format=qcow2 \
     --disk path="$CLOUD_INIT_ISO",device=cdrom \
     --os-type linux \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --graphics none \
     --import \
     --network network=default \
